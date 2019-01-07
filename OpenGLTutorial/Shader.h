@@ -1,6 +1,5 @@
 #pragma once
 
-
 #ifndef SHADER_H
 #define SHADER_H
 
@@ -11,10 +10,15 @@
 #include <sstream>
 #include <iostream>
 
+
+// ------------------------------------------------------------------------
+// Load shader from file
+// ------------------------------------------------------------------------
 class Shader
 {
 public:
     unsigned int ID;
+    // ------------------------------------------------------------------------
     // constructor generates the shader on the fly
     // ------------------------------------------------------------------------
     Shader(const char* vertexPath, const char* fragmentPath)
@@ -71,12 +75,14 @@ public:
         glDeleteShader(vertex);
         glDeleteShader(fragment);
     }
+    // ------------------------------------------------------------------------
     // activate the shader
     // ------------------------------------------------------------------------
     void use()
     {
         glUseProgram(ID);
     }
+    // ------------------------------------------------------------------------
     // utility uniform functions
     // ------------------------------------------------------------------------
     void setBool(const std::string &name, bool value) const
@@ -93,8 +99,13 @@ public:
     {
         glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
     }
-
+    // ------------------------------------------------------------------------
+    void setMat4(const std::string &name, const glm::mat4 &mat) const
+    {
+        glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+    }
 private:
+    // ------------------------------------------------------------------------
     // utility function for checking shader compilation/linking errors.
     // ------------------------------------------------------------------------
     void checkCompileErrors(unsigned int shader, std::string type)
